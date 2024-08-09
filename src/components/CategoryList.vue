@@ -1,10 +1,10 @@
-div<template>
+<template>
     <div>
       <div v-if="categoryStore.categories.lenght === 0 " class="flex justify-center items-center h-screen">
         <div class="loader"></div>
     </div>
     <div v-else> <div v-for="category in categoryStore.categories" :key="category.id" class="mb-8">
-            <h2 class="text-2xl text-[#915EFF] font-bold mb-4">{{ category.name }}</h2>
+            <h2 class="text-xl text-[#915EFF] font-bold mb-4">{{ category.name }}</h2>
             <div class="flex gap-4">
               <ProductCard
                 v-for="item in category.items"
@@ -30,22 +30,13 @@ div<template>
     },
     setup() {
       const categoryStore = useCategoryStore();
-      const { categories, fetchCategories } = categoryStore;
+      const {  fetchCategories } = categoryStore;
   
       onMounted(() => {
         console.log("Mounted and fetching categories...");
         fetchCategories();
       });
-  
-      watch(
-        () => categoryStore.categories,
-        (newCategories) => {
-          console.log("categoryStore.categories.lenght: ", categoryStore.categories.length);
-        },
-        { deep: true } 
-      );
-  
-      return { categories,  categoryStore };
+      return { categoryStore };
     },
   };
   </script>
