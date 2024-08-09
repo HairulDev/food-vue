@@ -1,12 +1,15 @@
+
 <template>
   <div>
-    <div v-if="categoryStore.categories.length === 0" class="flex justify-center items-center h-screen">
+    <div v-if="itemStore.categories.length === 0" class="flex justify-center items-center h-screen">
       <div class="loader"></div>
     </div>
     <div v-else>
-      <div v-for="category in categoryStore.categories" :key="category.id" class="mb-8">
+      <!-- Iterasi untuk setiap kategori -->
+      <div v-for="category in itemStore.categories" :key="category.id" class="mb-8">
         <h2 class="text-xl text-[#915EFF] font-bold mb-4">{{ category.name }}</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <!-- Iterasi untuk setiap item dalam kategori -->
           <ProductCard
             v-for="item in category.items"
             :key="item.id"
@@ -19,6 +22,7 @@
         </div>
       </div>
     </div>
+    <!-- Komponen AddItemModal untuk menambah atau mengedit item -->
     <AddItemModal
       :isOpen="isModalOpen"
       :itemId="selectedItemId"
@@ -27,9 +31,9 @@
   </div>
 </template>
 
-<script>
-import { onMounted, ref } from 'vue';
-import { useCategoryStore } from '../stores/category';
+
+<script>import { onMounted, ref } from 'vue';
+import { useItemStore } from '../stores/item';
 import ProductCard from './ProductCard.vue';
 import AddItemModal from './AddItemModal.vue';
 
@@ -39,8 +43,8 @@ export default {
     AddItemModal,
   },
   setup() {
-    const categoryStore = useCategoryStore();
-    const { fetchCategories } = categoryStore;
+    const itemStore = useItemStore();
+    const { getProducts } = itemStore;
     const isModalOpen = ref(false);
     const selectedItemId = ref(null);
 
@@ -50,12 +54,13 @@ export default {
     };
 
     onMounted(() => {
-      fetchCategories();
+      getProducts();
     });
 
-    return { categoryStore, isModalOpen, selectedItemId, openDetailModal };
+    return { itemStore, isModalOpen, selectedItemId, openDetailModal };
   },
 };
+
 </script>
 
 <style scoped>
