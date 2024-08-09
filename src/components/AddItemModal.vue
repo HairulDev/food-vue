@@ -71,6 +71,15 @@
 
 
 <script>
+
+// props adalah properti yang digunakan untuk mendefinisikan data yang dapat diterima dari komponen induk saat komponen ini digunakan. Props memungkinkan komponen induk untuk mengirimkan data ke komponen anak.
+
+// data adalah sebuah fungsi yang mengembalikan sebuah objek berisi data lokal (state) yang dimiliki oleh komponen. Data ini hanya dapat diakses dan dimodifikasi di dalam komponen tersebut.
+
+// computed adalah properti yang digunakan untuk mendefinisikan properti terhitung (computed properties). Properti ini bergantung pada data lain dan akan diperbarui secara otomatis jika data tersebut berubah.
+// computed: Mengatur properti yang dihitung secara dinamis berdasarkan data lain, seperti categories yang mengambil data kategori dari store item.
+
+
 import { useItemStore } from '../stores/item';
 
 export default {

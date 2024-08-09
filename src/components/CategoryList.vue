@@ -10,9 +10,11 @@
         <h2 class="text-xl text-[#915EFF] font-bold mb-4">{{ category.name }}</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           <!-- Iterasi untuk setiap item dalam kategori -->
+          <!-- :key adalah binding untuk properti key : adalah shorthand untuk v-bind. -->
+          <!-- @ adalah shorthand untuk v-on, yang digunakan untuk mendengarkan event. -->
           <ProductCard
-            v-for="item in category.items"
-            :key="item.id"
+          v-for="item in category.items"
+          :key="item.id"
             :id="item.id"
             :title="item.title"
             :price="item.price"
@@ -36,6 +38,14 @@
 import { useItemStore } from '../stores/item';
 import ProductCard from './ProductCard.vue';
 import AddItemModal from './AddItemModal.vue';
+
+// components adalah properti di dalam objek komponen Vue yang digunakan untuk mendeklarasikan komponen lain yang akan digunakan di dalam template komponen ini.
+
+// setup adalah fungsi khusus di Vue 3 yang digunakan dalam komponen yang memanfaatkan Composition API.
+// Fungsi setup dieksekusi saat komponen diinisialisasi, sebelum lifecycle hooks lain seperti created, mounted, dll.
+// Di dalam fungsi setup, kita bisa mendeklarasikan variabel, fungsi, dan mengakses store yang kemudian akan digunakan dalam template komponen.
+
+// onMounted adalah lifecycle hook di Composition API yang setara dengan mounted di Options API.
 
 export default {
   components: {
