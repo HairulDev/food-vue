@@ -29,6 +29,18 @@
           <input v-model="price" class="w-full px-3 py-2 border rounded white-text-gradient" id="price" type="number" required />
         </div>
 
+        <!-- Dropdown untuk memilih satuan -->
+        <div class="mb-4">
+          <label class="block text-sm font-bold text-white mb-2" for="unit">Unit</label>
+          <select v-model="selectedUnit" class="w-full px-3 py-2 border rounded white-text-gradient" id="unit" required>
+            <option value="" disabled>Select a unit</option>
+            <!-- Menampilkan satuan yang ada -->
+            <option :key="'Kg'" :value="'Kg'">Kg</option>
+            <option :key="'Ikat'" :value="'Ikat'">Ikat</option>
+            <option :key="'Ons'" :value="'Ons'">Ons</option>
+          </select>
+        </div>
+
         <!-- Dropdown untuk memilih kategori -->
         <div class="mb-4">
           <label class="block text-sm font-bold text-white mb-2" for="category">Category</label>
@@ -100,6 +112,7 @@ export default {
       file: null,
       description: '',
       selectedCategory: '',
+      selectedUnit: '',
       isSubmitting: false,
     };
   },
@@ -130,6 +143,7 @@ export default {
       const formData = new FormData();
       formData.append('title', this.title);
       formData.append('price', this.price);
+      formData.append('unit', this.selectedUnit);
       formData.append('file', this.file);
       formData.append('description', this.description);
       formData.append('categoryId', this.selectedCategory);
@@ -149,6 +163,7 @@ export default {
         const item = await itemStore.getItemById(this.itemId);
         this.title = item.title;
         this.price = item.price;
+        this.unit = item.unit;
         this.description = item.description;
         this.selectedCategory = item.categoryId;
       }

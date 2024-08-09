@@ -1,5 +1,5 @@
 <template>
-  <div class="glassmorphism w-[200px] h-[330px] rounded overflow-hidden shadow-lg">
+  <div class="glassmorphism w-[200px] min-h-[330px] max-h-[400px] rounded overflow-hidden shadow-lg">
     <img
       :src="`https://wnpukijoybwfgrpearge.supabase.co/storage/v1/object/public/food/item/${imageUrl}`"
       alt="Product image"
@@ -10,7 +10,7 @@
         {{ title }}
       </div>
       <p class="text-gray-200 text-base font-bold">
-        {{ formatPrice(price) }}
+        {{ formatPrice(price) }} / {{ unit }}
       </p>
     </div>
     <div class="px-6 py-3">
@@ -62,6 +62,10 @@ export default {
       type: Number,
       required: true,
     },
+    unit: {
+      type: String,
+      required: true,
+    },
     imageUrl: {
       type: String,
       required: true,
@@ -90,6 +94,7 @@ export default {
         id: props.id,
         title: props.title,
         price: props.price,
+        unit: props.unit,
         quantity: quantity.value,
         imageUrl: props.imageUrl,
       });

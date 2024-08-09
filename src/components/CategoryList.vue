@@ -18,6 +18,7 @@
             :id="item.id"
             :title="item.title"
             :price="item.price"
+            :unit="item.unit"
             :imageUrl="item.images.image_url"
             @open-detail-modal="openDetailModal"
           />
@@ -34,7 +35,8 @@
 </template>
 
 
-<script>import { onMounted, ref } from 'vue';
+<script>
+import { onMounted, ref } from 'vue';
 import { useItemStore } from '../stores/item';
 import ProductCard from './ProductCard.vue';
 import AddItemModal from './AddItemModal.vue';
