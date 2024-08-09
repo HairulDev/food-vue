@@ -8,8 +8,9 @@ export const useCategoryStore = defineStore('category', {
     actions: {
         async fetchCategories() {
             try {
-                const response = await axios.get('https://food-express-supabase.vercel.app/v1/customer/landing-page');
+                const response = await axios.get(`https://food-express-supabase.vercel.app/v1/customer/landing-page`);
                 this.categories = response.data.category;
+                console.log("Categories updated: ", this.categories);
             } catch (error) {
                 console.error("Error fetching categories:", error);
             }

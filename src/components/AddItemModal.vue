@@ -7,7 +7,9 @@
         </svg>
       </button>
 
-      <h2 class="text-2xl orange-text-gradient font-bold mb-4">Add New Item</h2>
+      <h2 class="text-2xl orange-text-gradient font-bold mb-4">
+        {{ title ? 'Edit Item' : 'Add New Item' }}
+      </h2>      
       <form @submit.prevent="submitForm">
         <div class="mb-4">
           <label class="block text-sm font-bold text-white mb-2" for="title">Title</label>
@@ -36,21 +38,30 @@
         </div>
         <div class="flex justify-end">
           <button type="button" @click="closeModal" class="bg-[#b5179e] hover:bg-[#b5179e] text-white font-bold py-2 px-4 rounded mr-2">Cancel</button>
-          <button type="submit" class="bg-[#915EFF] hover:bg-[#915EFF] text-white font-bold py-2 px-4 rounded">Add Item</button>
+          <button type="button" @click="deleteItem" v-if="title" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2">
+            Delete
+          </button>
+          <button type="submit"  :disabled="isSubmitting" class="bg-[#915EFF] hover:bg-[#915EFF] text-white font-bold py-2 px-4 rounded">Add Item</button>
         </div>
       </form>
     </div>
   </div>
 </template>
 
+
 <script>
 import axios from 'axios';
+import { useCategoryStore } from '../stores/category';
 
 export default {
   props: {
     isOpen: {
       type: Boolean,
       required: true,
+    },
+    itemId: {
+      type: Number,
+      required: false,
     },
   },
   data() {
@@ -59,48 +70,88 @@ export default {
       price: '',
       file: null,
       description: '',
-      categories: [], // Menyimpan daftar kategori
-      selectedCategory: '', // Menyimpan kategori yang dipilih
+      categories: [],
+      selectedCategory: '',
+      isSubmitting: false,
     };
   },
   methods: {
     closeModal() {
       this.$emit('close');
     },
+    async deleteItem() {
+      try {
+        const response = await axios.delete(`https://food-express-supabase.vercel.app/admin/item/${this.itemId}/delete`);
+        if (response.data.success) {
+          alert('Item deleted successfully');
+          const categoryStore = useCategoryStore();
+          await categoryStore.fetchCategories();
+          this.closeModal();
+        } else {
+          alert('Failed to delete item. Please try again.');
+        }
+      } catch (error) {
+        console.error('Failed to delete item:', error);
+        alert('An error occurred. Please try again.');
+      }
+    },
     handleFileUpload(event) {
       this.file = event.target.files[0];
     },
     async submitForm() {
+      this.isSubmitting = true;
       const formData = new FormData();
       formData.append('title', this.title);
       formData.append('price', this.price);
       formData.append('file', this.file);
       formData.append('description', this.description);
-      formData.append('categoryId', this.selectedCategory); // Menyertakan kategori yang dipilih
+      formData.append('categoryId', this.selectedCategory);
 
       try {
-        console.log("formData===>>",formData)
-        const response = await axios.post('http://localhost:5200/admin/item', formData, {
+        const url = this.itemId
+          ? `https://food-express-supabase.vercel.app/admin/item/${this.itemId}`
+          : `https://food-express-supabase.vercel.app/admin/item`;
+        const method = this.itemId ? 'put' : 'post';
+
+        const response = await axios[method](url, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
+
         if (response.data.success) {
-        alert(response.data.message); // Menampilkan pesan sukses dalam alert
-      } else {
-        alert('Failed to create item. Please try again.');
-      }
-        console.log('Item added successfully:', response.data);
+          alert(response.data.message);
+          const categoryStore = useCategoryStore();
+          await categoryStore.fetchCategories();
+        } else {
+          alert('Failed to process item. Please try again.');
+        }
         this.closeModal();
       } catch (error) {
-        console.error('Error adding item:', error);
+        console.error('Error processing item:', error);
+        alert('An error occurred. Please try again.');
+      } finally {
+        this.isSubmitting = false;
+      }
+    },
+    async getItemById() {
+      if (!this.itemId) return;
+
+      try {
+        const response = await axios.get(`https://food-express-supabase.vercel.app/admin/itemById/${this.itemId}`);
+        const item = response.data.item;
+        this.title = item.title;
+        this.price = item.price;
+        this.description = item.description;
+        this.selectedCategory = item.categoryId;
+      } catch (error) {
+        console.error('Error fetching item details:', error);
       }
     },
     async getCategory() {
       try {
-        const response = await axios.get('http://localhost:5200/admin/category');
-        this.categories = response.data.category; // Simpan data kategori ke dalam `categories`
-        console.log("this.categories ====>>>", this.categories);
+        const response = await axios.get(`https://food-express-supabase.vercel.app/admin/category`);
+        this.categories = response.data.category;
       } catch (error) {
         console.error('Error fetching categories:', error);
       }
@@ -110,13 +161,12 @@ export default {
     isOpen(newVal) {
       if (newVal) {
         this.getCategory();
+        this.getItemById();
       }
     },
   },
 };
 </script>
 
-
 <style scoped>
-/* Additional styles if necessary */
 </style>
