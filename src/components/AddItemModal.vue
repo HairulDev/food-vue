@@ -12,7 +12,7 @@
 
       <!-- Judul modal, bergantung pada apakah sedang mengedit atau menambah item -->
       <h2 class="text-2xl orange-text-gradient font-bold mb-4">
-        {{ title ? 'Edit Item' : 'Add New Item' }}
+        {{ title ? 'Edit Item (OnProgress)' : 'Add New Item' }}
       </h2>
       
       <!-- Form untuk menambah atau mengedit item -->
@@ -59,7 +59,9 @@
           <button type="button" @click="deleteItem" v-if="title" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2">
             Delete
           </button>
-          <button type="submit"  :disabled="isSubmitting" class="bg-[#915EFF] hover:bg-[#915EFF] text-white font-bold py-2 px-4 rounded">Add Item</button>
+          <button type="submit"  :disabled="isSubmitting" class="bg-[#915EFF] hover:bg-[#915EFF] text-white font-bold py-2 px-4 rounded">
+            {{ title ? 'Edit Item' : 'Add Item' }}
+            </button>
         </div>
       </form>
     </div>
