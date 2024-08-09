@@ -1,11 +1,15 @@
 <template>
-  <nav class="bg-blue-500 p-4 fixed w-full top-0 left-0 z-10">
+ <nav class="bg-transparent p-4 fixed w-full top-0 left-0 z-10">
     <div class="container mx-auto flex items-center justify-between">
       <div class="text-white text-xl font-bold">My Store</div>
       <div class="relative">
-        <button @click="navigateToCart" class="text-white">
-          <i class="fas fa-shopping-cart"></i> 
-          <span v-if="cartCount > 0" class="absolute -top-1 -right-1 bg-red-600 text-white rounded-full px-2 text-xs">
+        <button @click="navigateToCart" >
+        <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+        <g id="SVGRepo_iconCarrier"> <path d="M6.29977 5H21L19 12H7.37671M20 16H8L6 3H3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> </g>
+        </svg>
+          <span v-if="cartCount > 0" class="absolute -top-2 -right-1 bg-red-600 text-white rounded-full px-2 text-xs">
             {{ cartCount }}
           </span>
         </button>
@@ -21,13 +25,10 @@ import { useCartStore } from '../stores/cart';
 export default {
   setup() {
     const cartStore = useCartStore();
+    // Hitung jumlah item di keranjang
     const cartCount = computed(() => cartStore.cartItems.length);
 
-    const navigateToCart = () => {
-      console.log("Navigate to cart");
-    };
-
-    return { cartCount, navigateToCart };
+    return { cartCount };
   },
 };
 </script>

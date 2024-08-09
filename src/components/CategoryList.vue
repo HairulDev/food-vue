@@ -4,7 +4,7 @@ div<template>
         <div class="loader"></div>
     </div>
     <div v-else> <div v-for="category in categoryStore.categories" :key="category.id" class="mb-8">
-            <h2 class="text-2xl font-bold mb-4">{{ category.name }}</h2>
+            <h2 class="text-2xl text-[#915EFF] font-bold mb-4">{{ category.name }}</h2>
             <div class="flex gap-4">
               <ProductCard
                 v-for="item in category.items"
