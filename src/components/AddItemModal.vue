@@ -12,7 +12,7 @@
 
       <!-- Judul modal, bergantung pada apakah sedang mengedit atau menambah item -->
       <h2 class="text-2xl orange-text-gradient font-bold mb-4">
-        {{ this.itemId ? 'Edit Item (OnProgress)' : 'Add New Item' }}
+        {{ this.itemId ? 'Edit Item' : 'Add New Item' }}
       </h2>
       
       <!-- Form untuk menambah atau mengedit item -->

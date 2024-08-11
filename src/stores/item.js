@@ -52,8 +52,8 @@ export const useItemStore = defineStore('item', {
         },
         async submitForm(itemId, formData) {
             const url = itemId
-                ? `http://localhost:5200/admin/item/${itemId}`
-                : `http://localhost:5200/admin/item`;
+                ? `https://food-express-supabase.vercel.app/admin/item/${itemId}`
+                : `https://food-express-supabase.vercel.app/admin/item`;
             const method = itemId ? 'put' : 'post';
 
             try {
