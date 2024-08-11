@@ -11,7 +11,6 @@ export const useItemStore = defineStore('item', {
             try {
                 const response = await axios.get(`https://food-express-supabase.vercel.app/v1/customer/landing-page`);
                 this.categories = response.data.category;
-                console.log("Categories updated: ", this.categories);
             } catch (error) {
                 console.error("Error fetching categories:", error);
             }
@@ -20,16 +19,16 @@ export const useItemStore = defineStore('item', {
             try {
                 const response = await axios.get(`https://food-express-supabase.vercel.app/admin/category`);
                 this.categories = response.data.category;
-                console.log("Categories updated: ", this.categories);
             } catch (error) {
                 console.error("Error fetching categories:", error);
             }
         },
         async getItemById(itemId) {
             try {
+                console.log("getItemById called==>>",)
                 const response = await axios.get(`https://food-express-supabase.vercel.app/admin/itemById/${itemId}`);
                 this.item = response.data.item;
-                return this.item;
+                return this.item
             } catch (error) {
                 console.error('Error fetching item details:', error);
                 throw error;
@@ -53,8 +52,8 @@ export const useItemStore = defineStore('item', {
         },
         async submitForm(itemId, formData) {
             const url = itemId
-                ? `https://food-express-supabase.vercel.app/admin/item/${itemId}`
-                : `https://food-express-supabase.vercel.app/admin/item`;
+                ? `http://localhost:5200/admin/item/${itemId}`
+                : `http://localhost:5200/admin/item`;
             const method = itemId ? 'put' : 'post';
 
             try {

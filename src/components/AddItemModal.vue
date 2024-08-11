@@ -29,7 +29,6 @@
           <input v-model="price" class="w-full px-3 py-2 border rounded white-text-gradient" id="price" type="number" required />
         </div>
 
-        <!-- Dropdown untuk memilih satuan -->
         <div class="mb-4">
           <label class="block text-sm font-bold text-white mb-2" for="unit">Unit</label>
           <select v-model="selectedUnit" class="w-full px-3 py-2 border rounded white-text-gradient" id="unit" required>
@@ -41,11 +40,10 @@
           </select>
         </div>
 
-        <!-- Dropdown untuk memilih kategori -->
         <div class="mb-4">
           <label class="block text-sm font-bold text-white mb-2" for="category">Category</label>
           <select v-model="selectedCategory" class="w-full px-3 py-2 border rounded white-text-gradient" id="category" required>
-            <option value="" disabled selected>Select a category</option>
+            <option value="" disabled>Select a category</option>
             <!-- Menampilkan kategori yang ada -->
             <option v-for="category in categories" :key="category.id" :value="category.id">
               {{ category.name }}
@@ -53,10 +51,11 @@
           </select>
         </div>
 
+
         <!-- Input untuk upload gambar item -->
         <div class="mb-4">
           <label class="block text-sm font-bold text-white mb-2" for="file">Image</label>
-          <input @change="handleFileUpload" class="w-full px-3 py-2 border rounded" id="file" type="file" required />
+          <input @change="handleFileUpload" class="w-full px-3 py-2 border rounded" id="file" type="file"  />
         </div>
 
         <!-- Input untuk deskripsi item -->
@@ -68,7 +67,7 @@
         <!-- Tombol aksi: Cancel, Delete, dan Add/Update item -->
         <div class="flex justify-end">
           <button type="button" @click="closeModal" class="bg-[#b5179e] hover:bg-[#b5179e] text-white font-bold py-2 px-4 rounded mr-2">Cancel</button>
-          <button type="button" @click="deleteItem" v-if="title" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2">
+          <button type="button" @click="deleteItem" v-if="this.itemId" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2">
             Delete
           </button>
           <button type="submit"  :disabled="isSubmitting" class="bg-[#915EFF] hover:bg-[#915EFF] text-white font-bold py-2 px-4 rounded">
@@ -147,7 +146,6 @@ export default {
       formData.append('file', this.file);
       formData.append('description', this.description);
       formData.append('categoryId', this.selectedCategory);
-
       const itemStore = useItemStore();
       const success = await itemStore.submitForm(this.itemId, formData);
       if (success) {
@@ -163,9 +161,9 @@ export default {
         const item = await itemStore.getItemById(this.itemId);
         this.title = item.title;
         this.price = item.price;
-        this.unit = item.unit;
         this.description = item.description;
-        this.selectedCategory = item.categoryId;
+        this.selectedUnit = item.unit;
+        this.selectedCategory = item.categories.id;
       }
     }
   },
