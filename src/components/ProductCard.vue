@@ -1,10 +1,10 @@
 <template>
   <div class="glassmorphism w-[200px] min-h-[330px] max-h-[400px] rounded overflow-hidden shadow-lg">
-    <img
+    <!-- <img
       :src="`https://wnpukijoybwfgrpearge.supabase.co/storage/v1/object/public/food/item/${imageUrl}`"
       alt="Product image"
       class="w-full h-[130px]"
-    />
+    /> -->
     <div class="px-6 py-2">
       <div class="font-bold text-xl mb-2 orange-text-gradient">
         {{ title }}

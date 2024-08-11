@@ -1,27 +1,26 @@
 <template>
     <div>
-      <BarChart :data="chartData" :options="chartOptions" />
+      <PolarAreaChart :data="chartData" :options="chartOptions" />
     </div>
   </template>
   
   <script>
-  import { Bar } from 'vue-chartjs';
+  import { PolarArea } from 'vue-chartjs';
   import axios from 'axios';
   import {
     Chart as ChartJS,
     Title,
     Tooltip,
     Legend,
-    BarElement,
-    CategoryScale,
-    LinearScale
+    RadialLinearScale,
+    ArcElement
   } from 'chart.js';
   
-  ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+  ChartJS.register(Title, Tooltip, Legend, RadialLinearScale, ArcElement);
   
   export default {
     components: {
-      BarChart: Bar
+      PolarAreaChart: PolarArea
     },
     data() {
       return {
@@ -42,8 +41,10 @@
           labels: this.categoryItemCount.map(category => category.name),
           datasets: [
             {
-              label: 'Number of Items',
-              backgroundColor: '#42A5F5',
+              label: 'Total Items',
+              backgroundColor: [
+                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+              ],
               data: this.categoryItemCount.map(category => category.itemCount)
             }
           ]
@@ -59,10 +60,10 @@
     },
     mounted() {
       // Mengambil data kategori saat komponen dimuat
-      this.fetchCategories();
+      this.getProducts();
     },
     methods: {
-      fetchCategories() {
+      getProducts() {
         // Mengambil data dari API dan mengisi array categories
         axios.get('https://food-express-supabase.vercel.app/v1/customer/landing-page')
           .then(response => {
@@ -72,8 +73,8 @@
           .catch(error => {
             console.error('Error fetching categories:', error);
           });
+        }
       }
-    }
   };
   </script>
   
