@@ -40,6 +40,7 @@ import { onMounted, ref } from 'vue';
 import { useItemStore } from '../stores/item';
 import ProductCard from './ProductCard.vue';
 import AddItemModal from './AddItemModal.vue';
+import ChartItem from './ChartItem.vue';
 
 // components adalah properti di dalam objek komponen Vue yang digunakan untuk mendeklarasikan komponen lain yang akan digunakan di dalam template komponen ini.
 

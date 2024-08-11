@@ -2,7 +2,8 @@
   <div id="app">
     <Navbar />
     <main class="container mx-auto p-4 mt-20">
-      <div class="flex justify-end mb-4">
+      <ChartItem />
+      <div class="flex justify-end mb-4 mt-10">
         <button @click="openModal" class="bg-[#915EFF] hover:bg-[#915EFF]-700 text-white font-bold py-2 px-4 rounded">
           Add Item
         </button>
@@ -17,12 +18,14 @@
 import Navbar from './components/Navbar.vue';
 import CategoryList from './components/CategoryList.vue';
 import AddItemModal from './components/AddItemModal.vue';
+import ChartItem from './components/ChartItem.vue';
 
 export default {
   components: {
     Navbar,
     CategoryList,
     AddItemModal,
+    ChartItem,
   },
   data() {
     return {
