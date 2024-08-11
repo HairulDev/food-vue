@@ -1,14 +1,38 @@
 <template>
- <nav class="bg-transparent p-4 fixed w-full top-0 left-0 z-10">
+  <nav class="bg-transparent p-4 fixed w-full top-0 left-0 z-10">
     <div class="container mx-auto flex items-center justify-between">
       <div class="text-white text-xl font-bold">My Store</div>
-      <div class="relative">
-        <button @click="navigateToCart" >
-        <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g id="SVGRepo_bgCarrier" stroke-width="0"/>
-        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-        <g id="SVGRepo_iconCarrier"> <path d="M6.29977 5H21L19 12H7.37671M20 16H8L6 3H3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> </g>
-        </svg>
+      <div class="relative flex items-center">
+        <div class="relative">
+          <input 
+            type="text" 
+            v-model="searchQuery" 
+            @input="search"
+            class="px-4 py-1 rounded-lg text-black pr-10"
+            placeholder="Search for products..."
+          />
+          <button 
+            v-if="searchQuery" 
+            @click="clearSearch" 
+            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 8.586l3.95-3.95a1 1 0 111.415 1.415L11.415 10l3.95 3.95a1 1 0 01-1.415 1.415L10 11.415l-3.95 3.95a1 1 0 01-1.415-1.415L8.586 10 4.636 6.05a1 1 0 011.415-1.415L10 8.586z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+        <button @click="navigateToCart" class="ml-4">
+          <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+            <g id="SVGRepo_iconCarrier"> 
+              <path d="M6.29977 5H21L19 12H7.37671M20 16H8L6 3H3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z" 
+                stroke="#ffffff" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"/> 
+            </g>
+          </svg>
           <span v-if="cartCount > 0" class="absolute -top-2 -right-1 bg-red-600 text-white rounded-full px-2 text-xs">
             {{ cartCount }}
           </span>
@@ -23,12 +47,32 @@ import { computed } from 'vue';
 import { useCartStore } from '../stores/cart';
 
 export default {
+  data() {
+    return {
+      searchQuery: ''
+    };
+  },
+  methods: {
+    search() {
+      this.$emit('search', this.searchQuery); // Emit the search query to the parent
+    },
+    clearSearch() {
+      this.searchQuery = ''; // Clear the search input
+      this.search(); // Trigger the search method to update the list
+    },
+    navigateToCart() {
+      // Handle navigation to cart
+    }
+  },
   setup() {
     const cartStore = useCartStore();
-    // Hitung jumlah item di keranjang
     const cartCount = computed(() => cartStore.cartItems.length);
 
     return { cartCount };
   },
 };
 </script>
+
+<style scoped>
+/* Your styles here */
+</style>

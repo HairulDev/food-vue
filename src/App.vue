@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Navbar />
+    <Navbar @search="handleSearch" />
     <main class="container mx-auto p-4 mt-20">
       <ChartItem />
       <div class="flex justify-end mb-4 mt-10">
@@ -8,7 +8,7 @@
           Add Item
         </button>
       </div>
-      <CategoryList />
+      <CategoryList :searchQuery="searchQuery" />
     </main>
     <AddItemModal :isOpen="isModalOpen" @close="closeModal" />
   </div>
@@ -30,6 +30,7 @@ export default {
   data() {
     return {
       isModalOpen: false,
+      searchQuery: ''
     };
   },
   methods: {
@@ -39,6 +40,9 @@ export default {
     closeModal() {
       this.isModalOpen = false;
     },
+    handleSearch(query) {
+      this.searchQuery = query;
+    }
   },
 };
 </script>

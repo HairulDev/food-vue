@@ -6,7 +6,7 @@
     </div>
     <div v-else>
       <!-- Iterasi untuk setiap kategori -->
-      <div v-for="category in itemStore.categories" :key="category.id" class="mb-8">
+      <div v-for="category in itemStore.filteredCategories" :key="category.id" class="mb-8">
         <h2 class="text-xl text-[#915EFF] font-bold mb-4">{{ category.name }}</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           <!-- Iterasi untuk setiap item dalam kategori -->
@@ -36,11 +36,10 @@
 
 
 <script>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useItemStore } from '../stores/item';
 import ProductCard from './ProductCard.vue';
 import AddItemModal from './AddItemModal.vue';
-import ChartItem from './ChartItem.vue';
 
 // components adalah properti di dalam objek komponen Vue yang digunakan untuk mendeklarasikan komponen lain yang akan digunakan di dalam template komponen ini.
 
@@ -55,11 +54,21 @@ export default {
     ProductCard,
     AddItemModal,
   },
-  setup() {
+  props: {
+    searchQuery: {
+      type: String,
+      default: '',
+    }
+  },
+  setup(props) {
     const itemStore = useItemStore();
     const { getProducts } = itemStore;
     const isModalOpen = ref(false);
     const selectedItemId = ref(null);
+
+    watch(() => props.searchQuery, (newQuery) => {
+      itemStore.searchProducts(newQuery);
+    });
 
     const openDetailModal = (id) => {
       selectedItemId.value = id;
@@ -70,7 +79,7 @@ export default {
       getProducts();
     });
 
-    return { itemStore, isModalOpen, selectedItemId, openDetailModal };
+    return { itemStore, isModalOpen, selectedItemId, openDetailModal, };
   },
 };
 

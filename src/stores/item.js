@@ -5,12 +5,14 @@ export const useItemStore = defineStore('item', {
     state: () => ({
         item: null,
         categories: [],
+        filteredCategories: [], // Store filtered categories
     }),
     actions: {
         async getProducts() {
             try {
                 const response = await axios.get(`https://food-express-supabase.vercel.app/v1/customer/landing-page`);
                 this.categories = response.data.category;
+                this.filteredCategories = this.categories; // Initialize filtered categories
             } catch (error) {
                 console.error("Error fetching categories:", error);
             }
@@ -19,8 +21,20 @@ export const useItemStore = defineStore('item', {
             try {
                 const response = await axios.get(`https://food-express-supabase.vercel.app/admin/category`);
                 this.categories = response.data.category;
+                this.filteredCategories = this.categories; // Initialize filtered categories
             } catch (error) {
                 console.error("Error fetching categories:", error);
+            }
+        },
+        async searchProducts(searchQuery) {
+            console.log("searchQuery====>>", searchQuery)
+            try {
+                const response = await axios.get(`https://food-express-supabase.vercel.app/v1/customer/landing-page/search`, {
+                    params: { searchQuery }
+                });
+                this.filteredCategories = response.data.category;
+            } catch (error) {
+                console.error('Error searching products:', error);
             }
         },
         async getItemById(itemId) {
@@ -28,7 +42,7 @@ export const useItemStore = defineStore('item', {
                 console.log("getItemById called==>>",)
                 const response = await axios.get(`https://food-express-supabase.vercel.app/admin/itemById/${itemId}`);
                 this.item = response.data.item;
-                return this.item
+                return this.item;
             } catch (error) {
                 console.error('Error fetching item details:', error);
                 throw error;
@@ -75,6 +89,6 @@ export const useItemStore = defineStore('item', {
                 alert('An error occurred. Please try again.');
                 throw error;
             }
-        }
+        },
     },
 });
