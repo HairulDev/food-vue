@@ -43,33 +43,25 @@
 </template>
 
 <script>
-import { computed } from 'vue';
-import { useCartStore } from '../stores/cart';
+import { ref } from 'vue';
+import { useItemStore } from '../stores/item';
 
 export default {
-  data() {
-    return {
-      searchQuery: ''
-    };
-  },
-  methods: {
-    search() {
-      this.$emit('search', this.searchQuery); // Emit the search query to the parent
-    },
-    clearSearch() {
-      this.searchQuery = ''; // Clear the search input
-      this.search(); // Trigger the search method to update the list
-    },
-    navigateToCart() {
-      // Handle navigation to cart
-    }
-  },
   setup() {
-    const cartStore = useCartStore();
-    const cartCount = computed(() => cartStore.cartItems.length);
+    const itemStore = useItemStore();
+    const searchQuery = ref('');
 
-    return { cartCount };
-  },
+    const search = () => {
+      itemStore.searchProducts(searchQuery.value);
+    };
+
+    const clearSearch = () => {
+      searchQuery.value = '';
+      itemStore.getProducts(); // Trigger the getProducts function to reset the product list
+    };
+
+    return { searchQuery, search, clearSearch };
+  }
 };
 </script>
 
