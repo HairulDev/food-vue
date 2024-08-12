@@ -123,15 +123,11 @@ export default {
       title: '',
       price: '',
       activeStep: 0,
-      formData: {
-        title: '',
-        price: '',
-        selectedUnit: '',
-        selectedCategory: '',
-        description: '',
-        file: null,
-        selectedBank: '',
-      },
+      selectedUnit: '',
+      selectedCategory: '',
+      description: '',
+      file: null,
+      selectedBank: '',
       isSubmitting: false,
       isAccordionOpen: true,
       imageUrl: '', 
@@ -181,11 +177,13 @@ export default {
     async submitForm() {
       this.isSubmitting = true;
       const formData = new FormData();
-      Object.keys(this.formData).forEach(key => {
-        if (this.formData[key] !== null && this.formData[key] !== '') {
-          formData.append(key, this.formData[key]);
-        }
-      });
+      formData.append('title', this.title);
+      formData.append('price', this.price);
+      formData.append('unit', this.selectedUnit);
+      formData.append('file', this.file);
+      formData.append('description', this.description);
+      formData.append('categoryId', this.selectedCategory);
+     
       const itemStore = useItemStore();
       const success = await itemStore.submitForm(this.itemId, formData);
       if (success) {
@@ -211,15 +209,13 @@ export default {
       this.isAccordionOpen = !this.isAccordionOpen;
     },
     resetForm() {
-      this.formData = {
-        title: '',
-        price: '',
-        selectedUnit: '',
-        selectedCategory: '',
-        description: '',
-        file: null,
-        selectedBank: '',
-      };
+      this.title = '';
+      this.price = '';
+      this.selectedUnit = '';
+      this.selectedCategory = '';
+      this.description = '';
+      this.file = null,
+      this.selectedBank = '';
       this.activeStep = 0;
       this.isAccordionOpen = true;
     },
