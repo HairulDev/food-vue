@@ -11,6 +11,7 @@
       <CategoryList :searchQuery="searchQuery" />
     </main>
     <AddItemModal :isOpen="isModalOpen" @close="closeModal" />
+    <Stars />
   </div>
 </template>
 
@@ -19,6 +20,7 @@ import Navbar from './components/Navbar.vue';
 import CategoryList from './components/CategoryList.vue';
 import AddItemModal from './components/AddItemModal.vue';
 import ChartItem from './components/ChartItem.vue';
+import Stars from './components/Stars.vue';
 
 export default {
   components: {
@@ -26,6 +28,7 @@ export default {
     CategoryList,
     AddItemModal,
     ChartItem,
+    Stars,
   },
   data() {
     return {

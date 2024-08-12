@@ -75,7 +75,7 @@ export default {
             backgroundColor: [
               '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
             ],
-            data: this.categoryItemCount.map(category => category.itemCount)
+            data: this.categoryItemCount.map(category => category.itemCount),
           }
         ]
       };
@@ -84,7 +84,14 @@ export default {
       // Opsi untuk chart
       return {
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        plugins: {
+        legend: {
+          labels: {
+            color: '#ffffff' // Mengubah warna font label legend menjadi putih
+          }
+        }
+      },
       };
     }
   }
