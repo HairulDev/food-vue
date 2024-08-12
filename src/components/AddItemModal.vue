@@ -51,17 +51,31 @@
           </select>
         </div>
 
-
         <!-- Input untuk upload gambar item -->
         <div class="mb-4">
           <label class="block text-sm font-bold text-white mb-2" for="file">Image</label>
-          <input @change="handleFileUpload" class="w-full px-3 py-2 border rounded" id="file" type="file"  />
+          <input @change="handleFileUpload" class="w-full px-3 py-2 border rounded" id="file" type="file" />
+        </div>
+
+        <!-- Bagian Akordeon untuk menampilkan gambar -->
+        <div class="mb-4">
+          <button type="button" @click="toggleAccordion" class="w-full px-3 py-2 border rounded white-text-gradient text-white font-bold">
+            {{ isAccordionOpen ? 'Hide Image' : 'Show Image' }}
+          </button>
+          <transition name="fade">
+            <div v-show="isAccordionOpen" class="mt-2 text-white">
+              <img v-if="imageUrl" 
+                :src="imageUrl"
+                alt="Uploaded image"
+                class="w-full h-[130px] object-cover border rounded">
+            </div>
+          </transition>
         </div>
 
         <!-- Input untuk deskripsi item -->
         <div class="mb-4">
           <label class="block text-sm font-bold text-white mb-2" for="description">Description</label>
-          <textarea v-model="description" class="w-full px-3 py-2 border rounded white-text-gradient" id="description" rows="4" required></textarea>
+          <textarea v-model="description" class="w-full px-3 py-2 border rounded white-text-gradient" id="description" rows="3" required></textarea>
         </div>
 
         <!-- Tombol aksi: Cancel, Delete, dan Add/Update item -->
@@ -70,27 +84,16 @@
           <button type="button" @click="deleteItem" v-if="this.itemId" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2">
             Delete
           </button>
-          <button type="submit"  :disabled="isSubmitting" class="bg-[#915EFF] hover:bg-[#915EFF] text-white font-bold py-2 px-4 rounded">
+          <button type="submit" :disabled="isSubmitting" class="bg-[#915EFF] hover:bg-[#915EFF] text-white font-bold py-2 px-4 rounded">
             {{ this.itemId ? 'Edit Item' : 'Add Item' }}
-            </button>
+          </button>
         </div>
       </form>
     </div>
   </div>
 </template>
 
-
-
 <script>
-
-// props adalah properti yang digunakan untuk mendefinisikan data yang dapat diterima dari komponen induk saat komponen ini digunakan. Props memungkinkan komponen induk untuk mengirimkan data ke komponen anak.
-
-// data adalah sebuah fungsi yang mengembalikan sebuah objek berisi data lokal (state) yang dimiliki oleh komponen. Data ini hanya dapat diakses dan dimodifikasi di dalam komponen tersebut.
-
-// computed adalah properti yang digunakan untuk mendefinisikan properti terhitung (computed properties). Properti ini bergantung pada data lain dan akan diperbarui secara otomatis jika data tersebut berubah.
-// computed: Mengatur properti yang dihitung secara dinamis berdasarkan data lain, seperti categories yang mengambil data kategori dari store item.
-
-
 import { useItemStore } from '../stores/item';
 
 export default {
@@ -113,29 +116,36 @@ export default {
       selectedCategory: '',
       selectedUnit: '',
       isSubmitting: false,
+      isAccordionOpen: true,
+      imageUrl: '', 
     };
   },
   computed: {
     categories() {
       const itemStore = useItemStore();
       return itemStore.categories;
-    },
+    }
   },
   methods: {
     closeModal() {
       this.$emit('close');
+      this.isAccordionOpen = true;
     },
     async deleteItem() {
       const itemStore = useItemStore();
       const success = await itemStore.deleteItem(this.itemId);
       if (success) {
-        const itemStore = useItemStore();
         await itemStore.getProducts();
         this.closeModal();
       }
     },
     handleFileUpload(event) {
       this.file = event.target.files[0];
+      if (this.file) {
+        this.imageUrl = URL.createObjectURL(this.file); 
+      } else {
+        this.imageUrl = '';
+      }
     },
     async submitForm() {
       this.isSubmitting = true;
@@ -149,7 +159,6 @@ export default {
       const itemStore = useItemStore();
       const success = await itemStore.submitForm(this.itemId, formData);
       if (success) {
-        const itemStore = useItemStore();
         await itemStore.getProducts();
         this.closeModal();
       }
@@ -162,10 +171,14 @@ export default {
         this.title = item.title;
         this.price = item.price;
         this.description = item.description;
+        this.imageUrl = item.images.image_url ? `https://wnpukijoybwfgrpearge.supabase.co/storage/v1/object/public/food/item/${item.images.image_url}` : '';
         this.selectedUnit = item.unit;
         this.selectedCategory = item.categories.id;
       }
-    }
+    },
+    toggleAccordion() {
+      this.isAccordionOpen = !this.isAccordionOpen;
+    },
   },
   watch: {
     isOpen(newVal) {
@@ -177,8 +190,14 @@ export default {
     },
   },
 };
-
 </script>
 
+
 <style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0;
+}
 </style>

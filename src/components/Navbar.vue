@@ -43,13 +43,20 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { computed,ref } from 'vue';
 import { useItemStore } from '../stores/item';
+import { useCartStore } from '../stores/cart';
 
 export default {
   setup() {
+    const cartStore = useCartStore();
+    const cartCount = computed(() => cartStore.cartItems.length);
     const itemStore = useItemStore();
     const searchQuery = ref('');
+
+    const navigateToCart = () => {
+      console.log("Navigate to cart");
+    };
 
     const search = () => {
       itemStore.searchProducts(searchQuery.value);
@@ -59,8 +66,7 @@ export default {
       searchQuery.value = '';
       itemStore.getProducts(); // Trigger the getProducts function to reset the product list
     };
-
-    return { searchQuery, search, clearSearch };
+    return { searchQuery, search, clearSearch, cartCount, navigateToCart };
   }
 };
 </script>
