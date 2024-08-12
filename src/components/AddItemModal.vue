@@ -9,85 +9,96 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
-
       <!-- Judul modal, bergantung pada apakah sedang mengedit atau menambah item -->
       <h2 class="text-2xl orange-text-gradient font-bold mb-4">
         {{ this.itemId ? 'Edit Item' : 'Add New Item' }}
       </h2>
       
-      <!-- Form untuk menambah atau mengedit item -->
-      <form @submit.prevent="submitForm">
-        <!-- Input untuk judul item -->
-        <div class="mb-4">
-          <label class="block text-sm font-bold text-white mb-2" for="title">Title</label>
-          <input v-model="title" class="w-full px-3 py-2 border rounded white-text-gradient" id="title" type="text" required />
+      <!-- Progress bar -->
+      <div class="relative mb-10">
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="w-full h-1 bg-gray-300">
+            <div
+              class="h-1 bg-[#915EFF]"
+              :style="{ width: `${progressPercentage}%` }"
+            ></div>
+          </div>
         </div>
+      </div>
 
-        <!-- Input untuk harga item -->
+      <!-- Form multi-step -->
+      <form @submit.prevent="submitForm" class="flex flex-col ">
+      <div v-if="activeStep === 0">
         <div class="mb-4">
-          <label class="block text-sm font-bold text-white mb-2" for="price">Price</label>
-          <input v-model="price" class="w-full px-3 py-2 border rounded white-text-gradient" id="price" type="number" required />
+              <label class="block text-sm font-bold text-white mb-1" for="title">Title</label>
+              <input v-model="title" class="w-full px-3 py-2 border rounded white-text-gradient" id="title" type="text" required />
         </div>
-
+        <div class="mb-4">
+            <label class="block text-sm font-bold text-white mb-2" for="price">Price</label>
+            <input v-model="price" class="w-full px-3 py-2 border rounded white-text-gradient" id="price" type="number" required />
+        </div>
         <div class="mb-4">
           <label class="block text-sm font-bold text-white mb-2" for="unit">Unit</label>
-          <select v-model="selectedUnit" class="w-full px-3 py-2 border rounded white-text-gradient" id="unit" required>
-            <option value="" disabled>Select a unit</option>
-            <!-- Menampilkan satuan yang ada -->
-            <option :key="'Kg'" :value="'Kg'">Kg</option>
-            <option :key="'Ikat'" :value="'Ikat'">Ikat</option>
-            <option :key="'Ons'" :value="'Ons'">Ons</option>
-          </select>
+            <select v-model="selectedUnit" class="w-full px-3 py-2 border rounded white-text-gradient" id="unit" required>
+              <option value="" disabled>Select a unit</option>
+              <option :key="'Kg'" :value="'Kg'">Kg</option>
+              <option :key="'Ikat'" :value="'Ikat'">Ikat</option>
+              <option :key="'Ons'" :value="'Ons'">Ons</option>
+            </select>
         </div>
+      </div>
 
+      <div v-if="activeStep === 1">
         <div class="mb-4">
-          <label class="block text-sm font-bold text-white mb-2" for="category">Category</label>
-          <select v-model="selectedCategory" class="w-full px-3 py-2 border rounded white-text-gradient" id="category" required>
-            <option value="" disabled>Select a category</option>
-            <!-- Menampilkan kategori yang ada -->
-            <option v-for="category in categories" :key="category.id" :value="category.id">
-              {{ category.name }}
-            </option>
-          </select>
+            <label class="block text-sm font-bold text-white mb-2" for="category">Category</label>
+            <select v-model="selectedCategory" class="w-full px-3 py-2 border rounded white-text-gradient" id="category" required>
+              <option value="" disabled>Select a category</option>
+              <option v-for="category in categories" :key="category.id" :value="category.id">
+                {{ category.name }}
+              </option>
+            </select>
         </div>
+          <!-- Input untuk deskripsi item -->
+          <div class="mb-4">
+            <label class="block text-sm font-bold text-white" for="description">Description</label>
+            <textarea v-model="description" class="w-full px-3 py-2 border rounded white-text-gradient" id="description" rows="3" required></textarea>
+          </div>
+      </div>
+      <div v-if="activeStep === 2">
+          <div class="mb-4">
+              <label class="block text-sm font-bold text-white" for="file">Image</label>
+              <input @change="handleFileUpload" class="w-full px-3 py-2 border rounded" id="file" type="file" />
+          </div>
+          <div class="mb-4">
+            <button type="button" @click="toggleAccordion" class="w-full px-3 py-2 border rounded white-text-gradient text-white font-bold">
+              {{ isAccordionOpen ? 'Hide Image' : 'Show Image' }}
+            </button>
+            <transition name="fade">
+              <div v-show="isAccordionOpen" class="mt-2 text-white">
+                <img v-if="imageUrl" 
+                  :src="imageUrl"
+                  alt="Uploaded image"
+                  class="w-full h-[130px] object-cover border rounded">
+              </div>
+            </transition>
+          </div>
+      </div>
 
-        <!-- Input untuk upload gambar item -->
-        <div class="mb-4">
-          <label class="block text-sm font-bold text-white mb-2" for="file">Image</label>
-          <input @change="handleFileUpload" class="w-full px-3 py-2 border rounded" id="file" type="file" />
-        </div>
 
-        <!-- Bagian Akordeon untuk menampilkan gambar -->
-        <div class="mb-4">
-          <button type="button" @click="toggleAccordion" class="w-full px-3 py-2 border rounded white-text-gradient text-white font-bold">
-            {{ isAccordionOpen ? 'Hide Image' : 'Show Image' }}
-          </button>
-          <transition name="fade">
-            <div v-show="isAccordionOpen" class="mt-2 text-white">
-              <img v-if="imageUrl" 
-                :src="imageUrl"
-                alt="Uploaded image"
-                class="w-full h-[130px] object-cover border rounded">
-            </div>
-          </transition>
-        </div>
-
-        <!-- Input untuk deskripsi item -->
-        <div class="mb-4">
-          <label class="block text-sm font-bold text-white mb-2" for="description">Description</label>
-          <textarea v-model="description" class="w-full px-3 py-2 border rounded white-text-gradient" id="description" rows="3" required></textarea>
-        </div>
-
-        <!-- Tombol aksi: Cancel, Delete, dan Add/Update item -->
-        <div class="flex justify-end">
-          <button type="button" @click="closeModal" class="bg-[#b5179e] hover:bg-[#b5179e] text-white font-bold py-2 px-4 rounded mr-2">Cancel</button>
-          <button type="button" @click="deleteItem" v-if="this.itemId" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2">
+      <div class="flex justify-end">
+        <button v-if="activeStep > 0" type="button" @click="handleBack" class="bg-[#b5179e] text-white rounded hover:bg-[#b5179e] hover:opacity-90 py-2 px-4 mr-2">
+          Back
+        </button>
+        <button v-if="activeStep < 2" type="button" @click="handleNext" class="bg-[#915EFF] text-white rounded hover:bg-[#915EFF] hover:opacity-90 py-2 px-4 mr-2">
+          Next
+        </button>
+          <button type="button" @click="deleteItem" v-if="this.itemId && activeStep === 2" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2">
             Delete
           </button>
-          <button type="submit" :disabled="isSubmitting" class="bg-[#915EFF] hover:bg-[#915EFF] text-white font-bold py-2 px-4 rounded">
-            {{ this.itemId ? 'Edit Item' : 'Add Item' }}
-          </button>
-        </div>
+        <button type="submit" v-if="activeStep === 2"  :disabled="isSubmitting" class="bg-[#915EFF] hover:bg-[#915EFF] text-white font-bold py-2 px-4 rounded">
+          {{ this.itemId ? 'Edit Item' : 'Add Item' }}
+        </button>
+      </div>
       </form>
     </div>
   </div>
@@ -111,10 +122,16 @@ export default {
     return {
       title: '',
       price: '',
-      file: null,
-      description: '',
-      selectedCategory: '',
-      selectedUnit: '',
+      activeStep: 0,
+      formData: {
+        title: '',
+        price: '',
+        selectedUnit: '',
+        selectedCategory: '',
+        description: '',
+        file: null,
+        selectedBank: '',
+      },
       isSubmitting: false,
       isAccordionOpen: true,
       imageUrl: '', 
@@ -124,12 +141,26 @@ export default {
     categories() {
       const itemStore = useItemStore();
       return itemStore.categories;
+    },
+    progressPercentage() {
+      const steps = [0, 1, 2];
+      return (this.activeStep / (steps.length - 1)) * 100;
     }
   },
   methods: {
     closeModal() {
       this.$emit('close');
-      this.isAccordionOpen = true;
+      this.resetForm();
+    },
+    handleNext() {
+      if (this.activeStep < 3) {
+        this.activeStep++;
+      }
+    },
+    handleBack() {
+      if (this.activeStep > 0) {
+        this.activeStep--;
+      }
     },
     async deleteItem() {
       const itemStore = useItemStore();
@@ -150,12 +181,11 @@ export default {
     async submitForm() {
       this.isSubmitting = true;
       const formData = new FormData();
-      formData.append('title', this.title);
-      formData.append('price', this.price);
-      formData.append('unit', this.selectedUnit);
-      formData.append('file', this.file);
-      formData.append('description', this.description);
-      formData.append('categoryId', this.selectedCategory);
+      Object.keys(this.formData).forEach(key => {
+        if (this.formData[key] !== null && this.formData[key] !== '') {
+          formData.append(key, this.formData[key]);
+        }
+      });
       const itemStore = useItemStore();
       const success = await itemStore.submitForm(this.itemId, formData);
       if (success) {
@@ -173,11 +203,25 @@ export default {
         this.description = item.description;
         this.imageUrl = item.images.image_url ? `https://wnpukijoybwfgrpearge.supabase.co/storage/v1/object/public/food/item/${item.images.image_url}` : '';
         this.selectedUnit = item.unit;
+        console.log("this.imageUrl ====>>",this.imageUrl )
         this.selectedCategory = item.categories.id;
       }
     },
     toggleAccordion() {
       this.isAccordionOpen = !this.isAccordionOpen;
+    },
+    resetForm() {
+      this.formData = {
+        title: '',
+        price: '',
+        selectedUnit: '',
+        selectedCategory: '',
+        description: '',
+        file: null,
+        selectedBank: '',
+      };
+      this.activeStep = 0;
+      this.isAccordionOpen = true;
     },
   },
   watch: {
