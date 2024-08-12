@@ -4,8 +4,8 @@
     <PieChart v-if="selectedChartType === 'Pie'" :data="chartData" :options="chartOptions" />
     <BarChart v-if="selectedChartType === 'Bar'" :data="chartData" :options="chartOptions" />
   </div>
-    <select v-model="selectedChartType" class="mt-6 p-2 rounded-lg">
-      <option value="PolarArea">Polar Area</option>
+    <select v-model="selectedChartType" class="mt-6 p-2 rounded-lg white-text-gradient">
+      <option value="PolarArea" selected>Polar Area</option>
       <option value="Pie">Pie</option>
       <option value="Bar">Bar</option>
     </select>

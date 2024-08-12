@@ -172,7 +172,9 @@ textarea.white-text-gradient {
   caret-color: #fff; /* Warna kursor putih */
 }
 select.white-text-gradient {
-  color: #fff; /* Warna teks putih */
+  border-color: #fff !important;
+  border-width: 1px;
+  color: #fff !important; /* Warna teks putih */
   caret-color: #fff; /* Warna kursor putih */
 }
 
