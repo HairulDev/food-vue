@@ -1,14 +1,14 @@
 <template>
   <nav class="bg-transparent p-4 fixed w-full top-0 left-0 z-10">
     <div class="container mx-auto flex items-center justify-between">
-      <div class="text-white text-xl font-bold">My Store</div>
+      <div class="text-white font-bold">My Store</div>
       <div class="relative flex items-center">
         <div class="relative">
           <input 
             type="text" 
             v-model="searchQuery" 
             @input="search"
-            class="px-4 py-1 rounded-lg text-black pr-10"
+            class="px-4 py-1 rounded-lg text-black sm:w-[160px] pr-10"
             placeholder="Search for products..."
           />
           <button 
