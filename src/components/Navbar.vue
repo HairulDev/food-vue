@@ -8,7 +8,7 @@
             type="text" 
             v-model="searchQuery" 
             @input="search"
-            class="px-4 py-1 rounded-lg text-black sm:w-[160px] pr-10"
+            class="px-4 py-1 rounded-lg text-black min-w-[160px] pr-10"
             placeholder="Search for products..."
           />
           <button 
