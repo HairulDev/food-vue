@@ -1,4 +1,6 @@
+
 <template>
+<transition name="fade-scale">
   <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center z-50">
     <!-- Modal -->
     <div class="glassmorphism-blur p-6 rounded-lg shadow-lg w-[400px] relative">
@@ -63,7 +65,7 @@
             <label class="block text-sm font-bold text-white" for="description">Description</label>
             <textarea v-model="description" class="w-full px-3 py-2 border rounded white-text-gradient" id="description" rows="3" required></textarea>
           </div>
-      </div>
+    </div>
       <div v-if="activeStep === 2">
           <div class="mb-4">
               <label class="block text-sm font-bold text-white" for="file">Image</label>
@@ -102,6 +104,7 @@
       </form>
     </div>
   </div>
+</transition>
 </template>
 
 <script>
@@ -234,10 +237,12 @@ export default {
 
 
 <style scoped>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s;
+.fade-scale-enter-active, .fade-scale-leave-active {
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+.fade-scale-enter, .fade-scale-leave-to {
   opacity: 0;
+  transform: scale(0.9);
 }
+
 </style>
