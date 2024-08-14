@@ -2,7 +2,7 @@
   <div id="app">
     <Navbar @search="handleSearch" />
     <router-view />
-    <!-- <Stars /> -->
+    <Stars />
   </div>
 </template>
 

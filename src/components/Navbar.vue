@@ -49,6 +49,7 @@
 import { computed, ref } from 'vue';
 import { useItemStore } from '../stores/item';
 import { useCartStore } from '../stores/cart';
+import { useRouter } from 'vue-router';
 
 export default {
   setup() {
@@ -56,10 +57,10 @@ export default {
     const cartCount = computed(() => cartStore.cartItems.length);
     const itemStore = useItemStore();
     const searchQuery = ref('');
-
+    const router = useRouter(); // Tambahkan useRouter di sini
 
     const navigateToCart = () => {
-      console.log("Navigate to cart");
+      router.push('/cart'); // Navigasi ke halaman /cart
     };
 
     const search = () => {
@@ -68,8 +69,9 @@ export default {
 
     const clearSearch = () => {
       searchQuery.value = '';
-      itemStore.getProducts(); // Trigger the getProducts function to reset the product list
+      itemStore.getProducts(); // Reset daftar produk
     };
+
     return { searchQuery, search, clearSearch, cartCount, navigateToCart };
   }
 };

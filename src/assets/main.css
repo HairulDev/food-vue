@@ -339,12 +339,6 @@ body:has(.card[data-color="green"]:hover) {
   }
 
 }
- 
-.glassmorphism-direction {
-  background: rgba(8, 116, 239, 0.07);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-}
 
 .glassmorphism {
   background: rgba(8, 116, 239, 0.174);
