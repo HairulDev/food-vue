@@ -1,7 +1,7 @@
 <template>
-  <nav class="bg-transparent p-4 fixed w-full top-0 left-0 z-10">
+  <nav class="p-4 fixed w-full top-0 left-0 z-10 bg-transparent">
     <div class="container mx-auto flex items-center justify-between">
-      <div class="text-white font-bold flex space-x-4"> <!-- Tambahkan space-x-4 untuk spasi antara link -->
+      <div class="text-white font-bold flex space-x-4">
         <router-link to="/" class="font-bold blue-text-gradient">My Store</router-link>
         <router-link to="/cart" class="font-bold blue-text-gradient">Cart</router-link>
       </div>
@@ -11,7 +11,10 @@
             type="text" 
             v-model="searchQuery" 
             @input="search"
-            class="px-4 py-1 rounded-lg text-black min-w-[160px] pr-10"
+            :class="[
+              'px-4 py-1 rounded-lg text-[#2f80ed] min-w-[160px] pr-10 border',
+              isScrolled ? 'bg-transparent border-gray-500' : 'bg-gray-200 border-gray-400'
+            ]"
             placeholder="Search for products..."
           />
           <button 
@@ -46,7 +49,7 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
 import { useItemStore } from '../stores/item';
 import { useCartStore } from '../stores/cart';
 import { useRouter } from 'vue-router';
@@ -57,10 +60,11 @@ export default {
     const cartCount = computed(() => cartStore.cartItems.length);
     const itemStore = useItemStore();
     const searchQuery = ref('');
-    const router = useRouter(); // Tambahkan useRouter di sini
+    const router = useRouter();
+    const isScrolled = ref(false);
 
     const navigateToCart = () => {
-      router.push('/cart'); // Navigasi ke halaman /cart
+      router.push('/cart');
     };
 
     const search = () => {
@@ -69,10 +73,22 @@ export default {
 
     const clearSearch = () => {
       searchQuery.value = '';
-      itemStore.getProducts(); // Reset daftar produk
+      itemStore.getProducts();
     };
 
-    return { searchQuery, search, clearSearch, cartCount, navigateToCart };
+    const handleScroll = () => {
+      isScrolled.value = window.scrollY > 50; // Mengatur jarak scroll dari atas halaman untuk mengubah background
+    };
+
+    onMounted(() => {
+      window.addEventListener('scroll', handleScroll);
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('scroll', handleScroll);
+    });
+
+    return { searchQuery, search, clearSearch, cartCount, navigateToCart, isScrolled };
   }
 };
 </script>
