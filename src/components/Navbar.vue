@@ -1,9 +1,14 @@
 <template>
   <nav class="p-4 fixed w-full top-0 left-0 z-10 bg-transparent">
     <div class="container mx-auto flex items-center justify-between">
-      <div class="text-white font-bold flex space-x-4">
-        <router-link to="/" class="font-bold blue-text-gradient">My Store</router-link>
-        <router-link to="/cart" class="font-bold blue-text-gradient">Cart</router-link>
+      <div class="text-white font-bold flex space-x-4"> 
+        <router-link 
+          v-for="(link, index) in navLinks" 
+          :key="index" 
+          :to="link.path" 
+          class="font-bold blue-text-gradient">
+          {{ link.name }}
+        </router-link>
       </div>
       <div class="relative flex items-center">
         <div class="relative">
@@ -52,6 +57,7 @@
 import { computed, ref, onMounted, onUnmounted } from 'vue';
 import { useItemStore } from '../stores/item';
 import { useCartStore } from '../stores/cart';
+import { navLinks } from '@/constans/navLinks';
 import { useRouter } from 'vue-router';
 
 export default {
@@ -77,7 +83,7 @@ export default {
     };
 
     const handleScroll = () => {
-      isScrolled.value = window.scrollY > 50; // Mengatur jarak scroll dari atas halaman untuk mengubah background
+      isScrolled.value = window.scrollY > 50; 
     };
 
     onMounted(() => {
@@ -88,7 +94,7 @@ export default {
       window.removeEventListener('scroll', handleScroll);
     });
 
-    return { searchQuery, search, clearSearch, cartCount, navigateToCart, isScrolled };
+    return { navLinks, searchQuery, search, clearSearch, cartCount, navigateToCart, isScrolled };
   }
 };
 </script>
