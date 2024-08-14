@@ -178,6 +178,15 @@ select.white-text-gradient {
   caret-color: #fff; /* Warna kursor putih */
 }
 
+button.green-text-gradient {
+  border-color: #11998e;
+  border-width: 1px;
+}
+button.blue-text-gradient {
+  border-color: #56ccf2;
+  border-width: 1px;
+}
+
 /* canvas- styles */
 .canvas-loader {
   font-size: 10px;
