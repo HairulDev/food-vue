@@ -27,7 +27,6 @@ export const useItemStore = defineStore('item', {
             }
         },
         async searchProducts(searchQuery) {
-            console.log("searchQuery====>>", searchQuery)
             try {
                 const response = await axios.get(`https://food-express-supabase.vercel.app/v1/customer/landing-page/search`, {
                     params: { searchQuery }
@@ -39,7 +38,6 @@ export const useItemStore = defineStore('item', {
         },
         async getItemById(itemId) {
             try {
-                console.log("getItemById called==>>",)
                 const response = await axios.get(`https://food-express-supabase.vercel.app/admin/itemById/${itemId}`);
                 this.item = response.data.item;
                 return this.item;

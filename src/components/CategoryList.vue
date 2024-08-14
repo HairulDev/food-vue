@@ -8,7 +8,7 @@
       <!-- Iterasi untuk setiap kategori -->
       <div v-for="category in itemStore.filteredCategories" :key="category.id" class="mb-8">
         <h2 class="text-xl text-[#915EFF] font-bold mb-4">{{ category.name }}</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           <!-- Iterasi untuk setiap item dalam kategori -->
           <!-- :key adalah binding untuk properti key : adalah shorthand untuk v-bind. -->
           <!-- @ adalah shorthand untuk v-on, yang digunakan untuk mendengarkan event. -->

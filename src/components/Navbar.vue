@@ -1,7 +1,10 @@
 <template>
   <nav class="bg-transparent p-4 fixed w-full top-0 left-0 z-10">
     <div class="container mx-auto flex items-center justify-between">
-      <div class="text-white font-bold">My Store</div>
+      <div class="text-white font-bold flex space-x-4"> <!-- Tambahkan space-x-4 untuk spasi antara link -->
+        <router-link to="/" class="font-bold blue-text-gradient">My Store</router-link>
+        <router-link to="/cart" class="font-bold blue-text-gradient">Cart</router-link>
+      </div>
       <div class="relative flex items-center">
         <div class="relative">
           <input 
@@ -43,7 +46,7 @@
 </template>
 
 <script>
-import { computed,ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useItemStore } from '../stores/item';
 import { useCartStore } from '../stores/cart';
 
@@ -53,6 +56,7 @@ export default {
     const cartCount = computed(() => cartStore.cartItems.length);
     const itemStore = useItemStore();
     const searchQuery = ref('');
+
 
     const navigateToCart = () => {
       console.log("Navigate to cart");

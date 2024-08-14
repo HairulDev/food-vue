@@ -204,7 +204,6 @@ export default {
         this.description = item.description;
         this.imageUrl = item.images.image_url ? `https://wnpukijoybwfgrpearge.supabase.co/storage/v1/object/public/food/item/${item.images.image_url}` : '';
         this.selectedUnit = item.unit;
-        console.log("this.imageUrl ====>>",this.imageUrl )
         this.selectedCategory = item.categories.id;
       }
     },
