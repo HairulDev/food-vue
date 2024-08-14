@@ -28,7 +28,7 @@
         </div>
       </div>
     </div>
-    <div class="px-6 py-2 flex items-center justify-between">
+    <div class="px-4 py-2 flex items-center justify-between">
       <button @click="openDetailModal" class="green-text-gradient font-bold py-2 px-4 rounded">
         Detail
       </button>
