@@ -32,7 +32,7 @@
             </svg>
           </button>
         </div>
-        <button @click="navigateToCart" class="ml-4">
+        <button @click="navigateToCart" class="ml-4 relative">
           <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g id="SVGRepo_bgCarrier" stroke-width="0"/>
             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
@@ -44,7 +44,11 @@
                 stroke-linejoin="round"/> 
             </g>
           </svg>
-          <span v-if="cartCount > 0" class="absolute -top-2 -right-1 bg-red-600 text-white rounded-full px-2 text-xs">
+          <span 
+            v-if="cartCount > 0" 
+            :class="{'animate-pulse': pulseActive}" 
+            class="absolute -top-2 -right-1 bg-red-600 text-white rounded-full px-2 text-xs"
+          >
             {{ cartCount }}
           </span>
         </button>
@@ -54,7 +58,7 @@
 </template>
 
 <script>
-import { computed, ref, onMounted, onUnmounted } from 'vue';
+import { computed, ref, watch, onMounted, onUnmounted } from 'vue';
 import { useItemStore } from '../stores/item';
 import { useCartStore } from '../stores/cart';
 import { navLinks } from '@/constans/navLinks';
@@ -64,6 +68,7 @@ export default {
   setup() {
     const cartStore = useCartStore();
     const cartCount = computed(() => cartStore.cartItems.length);
+    const pulseActive = ref(false);
     const itemStore = useItemStore();
     const searchQuery = ref('');
     const router = useRouter();
@@ -86,6 +91,16 @@ export default {
       isScrolled.value = window.scrollY > 50; 
     };
 
+    watch(cartCount, (newVal, oldVal) => {
+    console.log("cartStore.cartItems===>>",cartStore.cartItems)
+      if (newVal !== oldVal) {
+        pulseActive.value = true;
+        setTimeout(() => {
+          pulseActive.value = false;
+        }, 500);
+      }
+    });
+
     onMounted(() => {
       window.addEventListener('scroll', handleScroll);
     });
@@ -94,11 +109,25 @@ export default {
       window.removeEventListener('scroll', handleScroll);
     });
 
-    return { navLinks, searchQuery, search, clearSearch, cartCount, navigateToCart, isScrolled };
+    return { navLinks, searchQuery, search, clearSearch, cartCount, navigateToCart, isScrolled, pulseActive };
   }
 };
 </script>
 
 <style scoped>
-/* Your styles here */
+@keyframes pulseAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-pulse {
+  animation: pulseAnimation 0.5s ease-in-out;
+}
 </style>
